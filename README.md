@@ -25,11 +25,19 @@ Next, [configure a static IP.](https://wiki.debian.org/NetworkConfiguration#Conf
 $ sudo vim /etc/network/interfaces
 ```
 ```
+# The primary network interface
 auto enp0s3
+```
+```
+$ sudo vim /etc/network/interfaces.d/enp0s3
+```
+```
 iface enp00s3 inet static
-    address 10.11.249.86/30
+    address 10.11.249.86
+    netmask 255.255.255.252
     gateway 10.11.254.254
 ```
+
 Here I picked a random IP which does not belogn any computer in the cluster, and not used by anyone else (to check this I just used ping). With a Netmask \30 configuration the number of usable IP is two. I picked a network address 10.11.249.84 and set my IP to 10.11.200.86.
 
 Restart networking service to update network interface and check the current state and verify internet connection:
@@ -133,19 +141,96 @@ I installed [portsentry](https://en-wiki.ikoula.com/en/To_protect_against_the_sc
 ```
 $ sudo apt-get update && apt-get install portsentry
 ```
+To use the portsentyr in advanced mode, following rules were changed:
 ```
 $ sudo vim /etc/default/portsentry
 ```
-
+```
+TCP_MODE="atcp"
+UDP_MODE="audp"
+```
+To ban the IP addresses attempting port scan:
+```
+$ sudo vim /etc/portsentry/portsentry.conf
+```
+```
+BLOCK_UDP="1"
+BLOCK_TCP="1"
+```
+```
+# iptables support for Linux
+KILL_ROUTE="/sbin/iptables -I INPUT -s $TARGET$ -j DROP"
+```
+To unban the IP, this command can be used and it is a good practice to check /etc/hosts.deny file to see/remove banned IPs:
+```
+iptables -D INPUT -s 178.170.xxx.xxx -j DROP
+```
+To test if portsentry protects against port scans, I used Nmap:
+```
+nmap <IP>
+```
+```
+nmap -sT <IP>
+```
 ### 7. Stopping the unnecessary services
 
+
 ### 8. A script to update packages
+```
+$ cd /usr/local/bin/
+$ touch auto_update.sh
+$ chmod 0755 auto_update.sh
+$ vim auto_update.sh
+```
+```
+#!/bin/bash
 
+sudo apt-get update -y >> /var/log/update_script.log
+sudo apt-get upgrade -y >> /var/log/update_script.log
+```
+Add to crontab:
+```
+$ sudo crontab -e
+```
+```
+0 4 * * 0 /usr/local/bin/auto_update.sh
+@reboot /usr/local/bin/auto_update.sh
+```
 ### 9. A script to monitor changes in /etc/crontab file to notify root via local email service
+monitor_crontab.sh script:
+```
+#!/bin/bash
 
+DIFF=$(diff /etc/crontab.back /etc/crontab)
+cat /etc/crontab > /etc/crontab.back
+if [ "$DIFF" != "" ]; then
+	echo "change detected in crontab, root will be notified" | mail -s "crontab modified" root
+fi
+```
+To use the local mail system, I installed mailutils and postfix:
+```
+$ apt install mailutils postfix
+```
+For postfix settings, I chose local only and set system mail name to debian.lan. Then edited /etc/aliases:
+```
+root: root@debian.lan
+```
+to enable alias change:
+```
+$ sudo newaliases
+```
 ## Web part
+I did a pretty basic login page using html, php and css.
+[Resource](https://www.php.net/manual/en/tutorial.forms.php)
+I have three files for the login page
+- index.html
+- action.php
+- styles.css
+
+For self signed ssl certificate I followed [these instructions](https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-nginx-in-ubuntu-16-04)
 
 ## Deploymenyt part
+I wrote a script for deployment which basicly move files through ssh nad update the old ones if there is a change.
 
 
 
