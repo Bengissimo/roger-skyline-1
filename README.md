@@ -136,7 +136,11 @@ $ sudo fail2ban-client status
 To test if Fail2ban configuration:
 I used [slowloris](https://github.com/gkbrk/slowloris) for DoS attack and tried to connect via ssh from another computer lacking the ssh key.
 In both of the cases attacking IPs were blocked successfully.
-
+to confirm banned IPs, check this out:
+```
+sudo fail2ban-client status http-get-dos
+sudo fail2ban-client status sshd
+```
 ### 6. Protection against port scans
 I installed [portsentry](https://en-wiki.ikoula.com/en/To_protect_against_the_scan_of_ports_with_portsentry)
 
