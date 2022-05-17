@@ -80,6 +80,8 @@ $ sudo ufw status verbose
 ```
 
 ### 5. Fail2ban configuration to protect against denial of servicce attacks
+First I installed [nginx].(https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-debian-10)
+
 I chose to use [Fail2ban](https://www.digitalocean.com/community/tutorials/how-fail2ban-works-to-protect-services-on-a-linux-server) service. Fail2ban basically monitors the logs of common services and spot patterns in failed attemps using specific filters. If there is a match, an action is executed for that service. For example blocks the IP if it exceeds the treshhold of max retry. Here is how I configured Fail2ban for:
 
 ```
