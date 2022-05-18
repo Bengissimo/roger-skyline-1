@@ -284,8 +284,30 @@ I installed nginx (it has been already installed to test Fail2ban) and php-fpm.
 ```
 sudo apt install php-fpm
 ```
+```
+sudo vim /etc/nginx/sites-available/default
+```
+Add the following lines:
+```
+server {
+        listen 80;
+        root /var/www/html;
+        index index.php index.html index.htm;
+        server_name 10.11.239.86;
+
+        location / {
+            try_files $uri $uri/ =404;
+        }
+
+        location ~ \.php$ {
+            include snippets/fastcgi-php.conf;
+            fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+        }
+}
+```
+restart ```sudo systemctl restart nginx.service```
 [Resource](https://www.php.net/manual/en/tutorial.forms.php)
-I have three files for the login page
+I have three files for the login page at /var/www/html/
 - index.html
 - action.php
 - styles.css
