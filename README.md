@@ -172,11 +172,6 @@ Restart the portsentry:
 ```
 sudo service portsentry restart
 ```
-To unban the IP, this iptables command can be used. Also remove the banned IP from /etc/hosts.deny file:
-```
-iptables -D INPUT -s 178.170.xxx.xxx -j DROP
-sudo vim /etc/hosts.deny
-```
 To test if portsentry protects against port scans, I used Nmap.
 ```
 nmap <IP>
@@ -188,14 +183,48 @@ To check if the IP using Nmap is blocked:
 ```
 sudo tail -f /var/log/syslog
 ```
+To unban the IP, this iptables command can be used. Also remove the banned IP from /etc/hosts.deny file:
+```
+iptables -D INPUT -s 178.170.xxx.xxx -j DROP
+sudo vim /etc/hosts.deny
+```
 ### 7. Stopping the unnecessary services
 
+check the enabled services with the following command:
+```
+sudo systemctl list-unit-files --type service --state=enabled
+```
+I had the following list:
+```
+UNIT FILE              STATE   VENDOR PRESET
+apparmor.service       enabled enabled
+console-setup.service  enabled enabled
+cron.service           enabled enabled
+e2scrub_reap.service   enabled enabled
+fail2ban.service       enabled enabled
+getty@.service         enabled enabled
+keyboard-setup.service enabled enabled
+networking.service     enabled enabled
+nginx.service          enabled enabled
+ntp.service            enabled enabled
+postfix.service        enabled enabled
+rsyslog.service        enabled enabled
+ssh.service            enabled enabled
+systemd-pstore.service enabled enabled
+ufw.service            enabled enabled
 
+15 unit files listed.
+```
+I disabled console-setup adn keyboard-setup services:
+```
+sudo systemctl disable console-setup.service
+sudo systemctl disable keyboard-setup.service
+```
 ### 8. A script to update packages
 ```
 cd /usr/local/bin/
-touch auto_update.sh
-chmod 0755 auto_update.sh
+sudo touch auto_update.sh
+sudo chmod 0755 auto_update.sh
 vim auto_update.sh
 ```
 ```
@@ -213,6 +242,25 @@ sudo crontab -e
 @reboot /usr/local/bin/auto_update.sh
 ```
 ### 9. A script to monitor changes in /etc/crontab file to notify root via local email service
+To use the local mail system, I installed mailutils and postfix:
+```
+sudo apt install mailutils postfix
+```
+For postfix settings, I chose local only and set system mail name to debian.lan. Then edited /etc/aliases:
+```
+root: root@debian.lan
+```
+to enable alias change:
+```
+sudo newaliases
+```
+To test if the local mail service is working properly:
+```
+echo "sth to try" | mail -s "this is a mail trial" root
+sudo mail
+```
+If you see '"/var/mail/root": 1 message 1 new', all good. 
+
 monitor_crontab.sh script:
 ```
 #!/bin/bash
@@ -223,18 +271,13 @@ if [ "$DIFF" != "" ]; then
 	echo "change detected in crontab, root will be notified" | mail -s "crontab modified" root
 fi
 ```
-To use the local mail system, I installed mailutils and postfix:
+Crontab schedule at midnight to check if the /etc/crontab changed like this:
 ```
-apt install mailutils postfix
+sudo crontab -e
+add the following line
+0 0 * * * /usr/local/bin/monitor_crontab.sh
 ```
-For postfix settings, I chose local only and set system mail name to debian.lan. Then edited /etc/aliases:
-```
-root: root@debian.lan
-```
-to enable alias change:
-```
-sudo newaliases
-```
+
 ## Web part
 I did a pretty basic login page using html, php and css.
 [Resource](https://www.php.net/manual/en/tutorial.forms.php)
