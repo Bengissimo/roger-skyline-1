@@ -287,24 +287,21 @@ sudo apt install php-fpm
 ```
 sudo vim /etc/nginx/sites-available/default
 ```
-Add the following lines:
+Uncomment arrow pointed lines seen below:
 ```
-server {
-        listen 80;
-        root /var/www/html;
-        index index.php index.html index.htm;
-        server_name 10.11.239.86;
+	# pass PHP scripts to FastCGI server
+	#
+->	#location ~ \.php$ {
+->	#	include snippets/fastcgi-php.conf;
+	#
+	#	# With php-fpm (or other unix sockets):
+->	#	fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+	#	# With php-cgi (or other tcp sockets):
+	#	fastcgi_pass 127.0.0.1:9000;
+->	#}
 
-        location / {
-            try_files $uri $uri/ =404;
-        }
-
-        location ~ \.php$ {
-            include snippets/fastcgi-php.conf;
-            fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
-        }
-}
 ```
+
 restart ```sudo systemctl restart nginx.service```
 [Resource](https://www.php.net/manual/en/tutorial.forms.php)
 I have three files for the login page at /var/www/html/
