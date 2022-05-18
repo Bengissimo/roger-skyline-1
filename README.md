@@ -172,9 +172,10 @@ Restart the portsentry:
 ```
 sudo service portsentry restart
 ```
-To unban the IP, this command can be used and it is a good practice to check /etc/hosts.deny file to see/remove banned IPs:
+To unban the IP, this iptables command can be used. Also remove the banned IP from /etc/hosts.deny file:
 ```
 iptables -D INPUT -s 178.170.xxx.xxx -j DROP
+sudo vim /etc/hosts.deny
 ```
 To test if portsentry protects against port scans, I used Nmap.
 ```
