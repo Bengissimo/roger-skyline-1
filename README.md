@@ -280,6 +280,10 @@ add the following line
 
 ## Web part
 I did a pretty basic login page using html, php and css.
+I installed nginx (it has been already installed to test Fail2ban) and php-fpm.
+```
+sudo apt install php-fpm
+```
 [Resource](https://www.php.net/manual/en/tutorial.forms.php)
 I have three files for the login page
 - index.html
