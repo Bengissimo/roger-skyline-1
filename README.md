@@ -173,6 +173,11 @@ Uncomment the following line and comment on all the other options starting with 
 # iptables support for Linux
 KILL_ROUTE="/sbin/iptables -I INPUT -s $TARGET$ -j DROP"
 ```
+Comment out the KILL_HOSTS_DENY. If this option is active, the first nmap attack is banned. But the consequent attacks were not banned even though I unbanned the IP using iptables command and remove the IP from /etc/hosts.deny file. Somehow this IP is remembered.
+```
+#KILL_HOSTS_DENY="ALL: $TARGET$"
+#KILL_HOSTS_DENY="ALL: $TARGET$ : DENY"
+```
 Restart the portsentry:
 ```
 sudo service portsentry restart
