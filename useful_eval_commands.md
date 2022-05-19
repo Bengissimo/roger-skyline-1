@@ -41,4 +41,59 @@ Try to connect via SSH from client side:
 ```
 ssh -p <port_nb> new_user@IP
 ```
+## check ssh configurations
+```
+sudo cat /etc/ssh/sshd_config
+```
+
+## root should not connect via ssh
+```
+ssh -p 49786 root@10.11.239.86
+```
+See -> root@10.11.239.86: Permission denied (publickey).
+## List all firewall rules
+```
+sudo ufw status verbose
+```
+
+## Slowloris attack
+```
+cd /Users/bkandemi/bkandemi_workspace/slowloris
+python3 slowloris.py 10.11.239.86
+```
+check the jail for http-get-dos
+```
+sudo fail2ban-client status http-get-dos
+```
+## List all open ports
+```
+sudo lsof -Pni
+```
+or 
+```
+netstat -tunlp
+```
+## Check active services
+```
+sudo systemctl list-unit-files --type service --state=enabled
+```
+## Check update script and crontab
+```
+cat /usr/local/bin/auto_update.sh
+sudo crontab -e
+```
+## Check monitor_crontab script
+```
+cat /usr/local/bin/monitor_crontab.sh
+sudo crontab -e
+```
+```
+sudo vim /etc/crontab
+```
+run the monitor_crontab.sh script and check mail
+```
+sudo mail
+```
+
+
 
