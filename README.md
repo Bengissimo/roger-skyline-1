@@ -141,6 +141,11 @@ to confirm banned IPs, check this out:
 sudo fail2ban-client status http-get-dos
 sudo fail2ban-client status sshd
 ```
+
+To unban IP:
+```
+sudo fail2ban-client set sshd unbanip <IP>
+```
 ### 6. Protection against port scans
 I installed [portsentry](https://en-wiki.ikoula.com/en/To_protect_against_the_scan_of_ports_with_portsentry)
 
