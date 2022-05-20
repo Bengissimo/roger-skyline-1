@@ -1,8 +1,8 @@
-## check that Traefik, Docker or Vagrant are not installed 
+## Check that Traefik, Docker or Vagrant are not installed 
 ```
 sudo apt list –installed  | grep ‘docker\|vagrant\|traefik’
 ```
-## check disk size and partition
+## Check disk size and partition
 - sudo parted
 - lsblk
 - sudo fdisk -l
@@ -41,12 +41,12 @@ Try to connect via SSH from client side:
 ```
 ssh -p <port_nb> new_user@IP
 ```
-## check ssh configurations
+## Check ssh configurations
 ```
 sudo cat /etc/ssh/sshd_config
 ```
 
-## root should not connect via ssh
+## Root should not connect via ssh
 ```
 ssh -p 49786 root@10.11.239.86
 ```
@@ -94,16 +94,10 @@ run the monitor_crontab.sh script and check mail
 ```
 sudo mail
 ```
-## check that there is only one active configuration on the web server and. not the default one. in addtion, it should not "Listen" on the localhost of the VM.
+## Check that there is only one active configuration on the web server and. not the default one. In addtion, it should not "Listen" on the localhost of the VM.
 
 ```
 netstat --listening
 or 
 sudo lsof -Pni
 ```
-##
-
-
-
-
-
