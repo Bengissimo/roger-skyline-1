@@ -294,6 +294,7 @@ I installed nginx (it has been already installed to test Fail2ban) and php-fpm.
 ```
 sudo apt install php-fpm
 ```
+First I modified the default conf file for the settings asked for this project.
 ```
 sudo vim /etc/nginx/sites-available/default
 ```
@@ -311,7 +312,11 @@ Uncomment arrow pointed lines seen below:
 ->	#}
 
 ```
-
+Later I just renamed the default file:
+```
+cd /etc/nginx/sites-enabled/
+sudo mv default my_login_page
+```
 restart ```sudo systemctl restart nginx.service```
 [Resource](https://www.php.net/manual/en/tutorial.forms.php)
 
