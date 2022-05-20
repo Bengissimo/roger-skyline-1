@@ -328,4 +328,4 @@ I have three files for the login page at /var/www/html/
 For self signed ssl certificate I followed [these instructions](https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-nginx-in-ubuntu-16-04)
 
 ## Deploymenyt part
-I wrote a script for deployment which basicly move files through ssh nad update the old ones if there is a change.
+I wrote a script for deployment which basicly move files through ssh and update the old ones if there is a change.
