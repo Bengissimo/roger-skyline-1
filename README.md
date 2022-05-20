@@ -314,6 +314,7 @@ Uncomment arrow pointed lines seen below:
 
 restart ```sudo systemctl restart nginx.service```
 [Resource](https://www.php.net/manual/en/tutorial.forms.php)
+
 I have three files for the login page at /var/www/html/
 - index.html
 - action.php
