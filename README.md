@@ -225,10 +225,11 @@ ufw.service            enabled enabled
 
 15 unit files listed.
 ```
-I disabled console-setup adn keyboard-setup services:
+I disabled console-setup, keyboard-setup services and ntp.service:
 ```
 sudo systemctl disable console-setup.service
 sudo systemctl disable keyboard-setup.service
+sudo systemctl disable ntp.service
 ```
 ### 8. A script to update packages
 ```
@@ -281,7 +282,7 @@ if [ "$DIFF" != "" ]; then
 	echo "change detected in crontab, root will be notified" | mail -s "crontab modified" root
 fi
 ```
-Crontab schedule at midnight to check if the /etc/crontab changed like this:
+Crontab schedule at midnight to check if the /etc/crontab changed:
 ```
 sudo crontab -e
 add the following line
@@ -325,7 +326,7 @@ I have three files for the login page at /var/www/html/
 - action.php
 - styles.css
 
-For self signed ssl certificate I followed [these instructions](https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-nginx-in-ubuntu-16-04)
+For self signed ssl certificate I followed [these instructions](https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-nginx-in-ubuntu-16-04) and modified accrodingly the /etc/nginx/sites-enabled/my_login_page
 
 ## Deploymenyt part
 I wrote a script for deployment which basicly move files through ssh and update the old ones if there is a change.
